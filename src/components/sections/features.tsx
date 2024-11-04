@@ -5,7 +5,7 @@ import { Card } from "../ui/card";
 export default function Features() {
   return (
     <section>
-      <div className="container space-y-6 rounded-md bg-secondary py-14 lg:py-24 ">
+      <div className="container space-y-6 rounded-lg bg-background/30 backdrop-blur-md border py-14 lg:py-24 ">
         <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
           <h2 className="font-heading text-4xl md:text-6xl">Features</h2>
           <p className="max-w-[85%] text-balance leading-normal text-primary/70 sm:text-lg sm:leading-7">
@@ -14,35 +14,35 @@ export default function Features() {
           </p>
         </div>
         <div className="mx-auto grid justify-center gap-4 text-center sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3">
-          <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
+          <Card className="flex h-[160px] flex-col justify-between rounded-lg p-6 transition duration-200 ease-in-out hover:shadow-lg">
             <BrandIcons.nextjs />
             <p className="text-balance text-sm text-muted-foreground">
               App dir, Routing, Layouts, API routes, Server Components, Server
               actions.
             </p>
           </Card>
-          <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
+          <Card className="flex h-[160px] flex-col justify-between rounded-lg p-6 transition duration-200 ease-in-out hover:shadow-lg">
             <BrandIcons.shadcnUI />
 
             <p className="text-balance text-sm text-muted-foreground">
               UI components built using Radix UI and styled with Tailwind CSS.
             </p>
           </Card>
-          <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
+          <Card className="flex h-[160px] flex-col justify-between rounded-lg p-6 transition duration-200 ease-in-out hover:shadow-lg">
             <BrandIcons.prisma />
 
             <p className="text-balance text-sm text-muted-foreground">
               Using Postgres with Prisma ORM, hosted on Vercel Postgres.
             </p>
           </Card>
-          <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
+          <Card className="flex h-[160px] flex-col justify-between rounded-lg p-6 transition duration-200 ease-in-out hover:shadow-lg">
             <BrandIcons.luciaAuth />
 
             <p className="text-balance text-sm text-muted-foreground">
               Authentication and Authorization using LuciaAuth v3.
             </p>
           </Card>
-          <Card className="flex h-[160px] flex-col justify-between rounded-md p-6">
+          <Card className="flex h-[160px] flex-col justify-between rounded-lg p-6 transition duration-200 ease-in-out hover:shadow-lg">
             <BrandIcons.uploadthing />
 
             <p className="text-balance text-sm text-muted-foreground">
