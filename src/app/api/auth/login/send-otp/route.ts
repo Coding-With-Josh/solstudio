@@ -16,13 +16,20 @@ export const POST = async (req: Request) => {
         emailVerified: false,
       },
     });
+    console.log("Success");
 
     const otp = await generateEmailVerificationCode(user.id, body.email);
-    await sendOTP({
-      toMail: body.email,
-      code: otp,
-      userName: user.name?.split(" ")[0] || "",
-    });
+
+    try {
+      await sendOTP({
+        toMail: body.email,
+        code: otp,
+        userName: user.name?.split(" ")[0] || "",
+      });
+      console.log("Success sending");
+    } catch (error) {
+      console.log("aileddddd");
+    }
 
     return new Response(null, {
       status: 200,

@@ -29,14 +29,20 @@ export const sendOTP = async ({ toMail, code, userName }: SendOTPProps) => {
   const subject = "OTP for SolStudio";
   const temp = VerificationTemp({ userName, code });
 
-  await resend.emails.send({
-    from: `SolStudio <codewithjoshh@gmail.com>`,
-    to: toMail,
-    subject: subject,
-    headers: {
-      "X-Entity-Ref-ID": nanoid(),
-    },
-    react: temp,
-    text: "",
-  });
+  try {
+    await resend.emails.send({
+      from: `SolStudio <codewithjoshh@gmail.com>`,
+      to: toMail,
+      subject: subject,
+      headers: {
+        "X-Entity-Ref-ID": nanoid(),
+      },
+      react: temp,
+      text: code,
+    });
+    console.log("success sendotp")
+  } catch (error) {
+    console.error("Error sending OTP email:", error);
+    throw new Error("Failed to send OTP email");
+  }
 };
