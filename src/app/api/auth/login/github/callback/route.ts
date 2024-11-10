@@ -11,6 +11,10 @@ export const GET = async (request: NextRequest) => {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const storedState = cookies().get("github_oauth_state")?.value ?? null;
+
+  console.log("GitHub callback handler reached");
+  console.log(`Code: ${code}, State: ${state}`);
+  
   if (!code || !state || !storedState || state !== storedState) {
     return new Response(null, {
       status: 400,

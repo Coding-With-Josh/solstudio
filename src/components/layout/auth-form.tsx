@@ -45,74 +45,74 @@ export default function AuthForm() {
     }
   }, [countdown]);
 
-  async function onEmailSubmit(data: FormData) {
-    setIsLoading(true);
+  // async function onEmailSubmit(data: FormData) {
+  //   setIsLoading(true);
 
-    try {
-      const res = await fetch("/api/auth/login/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+  //   try {
+  //     const res = await fetch("/api/auth/login/send-otp", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(data),
+  //     });
 
-      if (!res.ok) {
-        throw new Error("Failed to send OTP");
-      }
-      setCurrentStep(2);
-      toast({
-        title: "OTP sent!",
-        description: "Please check your mail inbox",
-      });
-      setCountdown(30);
-    } catch (error) {
-      toast({
-        title: "Failed to send OTP",
-        description: "Please try again later",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  //     if (!res.ok) {
+  //       throw new Error("Failed to send OTP");
+  //     }
+  //     setCurrentStep(2);
+  //     toast({
+  //       title: "OTP sent!",
+  //       description: "Please check your mail inbox",
+  //     });
+  //     setCountdown(30);
+  //   } catch (error) {
+  //     toast({
+  //       title: "Failed to send OTP",
+  //       description: "Please try again later",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
 
-  async function onOTPSubmit(data: FormData) {
-    setIsVerifying(true);
+  // async function onOTPSubmit(data: FormData) {
+  //   setIsVerifying(true);
 
-    try {
-      const res = await fetch("/api/auth/login/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.email, code: otp }),
-      });
+  //   try {
+  //     const res = await fetch("/api/auth/login/verify-otp", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ email: data.email, code: otp }),
+  //     });
 
-      if (!res.ok) {
-        throw new Error("Invalid OTP");
-      }
-      toast({
-        title: "Successfully verified!",
-      });
-      router.push("/dashboard");
-    } catch (error) {
-      toast({
-        title: "Invalid OTP",
-        description: "Please try again",
-        variant: "destructive",
-      });
-    } finally {
-      setIsVerifying(false);
-    }
-  }
+  //     if (!res.ok) {
+  //       throw new Error("Invalid OTP");
+  //     }
+  //     toast({
+  //       title: "Successfully verified!",
+  //     });
+  //     router.push("/dashboard");
+  //   } catch (error) {
+  //     toast({
+  //       title: "Invalid OTP",
+  //       description: "Please try again",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setIsVerifying(false);
+  //   }
+  // }
 
-  async function handleResend() {
-    if (!getValues("email")) return;
-    await onEmailSubmit(getValues());
-  }
+  // async function handleResend() {
+  //   if (!getValues("email")) return;
+  //   await onEmailSubmit(getValues());
+  // }
 
   return (
     <div className={cn("mt-4 flex flex-col gap-4")}>
       {currentStep === 1 && (
         <>
-          <form onSubmit={handleSubmit(onEmailSubmit)}>
+          {/* <form onSubmit={handleSubmit(onEmailSubmit)}>
             <div className="flex flex-col gap-2.5">
               <div>
                 <Label className="sr-only" htmlFor="email">
@@ -145,7 +145,7 @@ export default function AuthForm() {
           </form>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background px-2 text-muted-foreground">/</span>
-          </div>
+          </div> */}
           {isGithubLoading ? (
             <Button className="w-full cursor-not-allowed" variant="outline">
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -159,7 +159,7 @@ export default function AuthForm() {
               Continue with <Icons.gitHub className="ml-2 h-4 w-4" />
             </Link>
           )}
-        </>
+        {/* </>
       )}
       {currentStep === 2 && (
         <>
@@ -220,7 +220,7 @@ export default function AuthForm() {
                 Resend OTP
               </Button>
             )}
-          </div>
+          </div> */}
         </>
       )}
     </div>
