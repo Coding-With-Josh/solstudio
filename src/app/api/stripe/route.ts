@@ -12,12 +12,15 @@ export async function GET(req: NextRequest) {
   const billingUrl = siteConfig(locale).url + "/dashboard/billing/";
   try {
     const { user, session } = await validateRequest();
+    console.log("User:", user); // Debug log
+    console.log("Session:", session); 
 
     if (!session) {
       return new Response("Unauthorized", { status: 401 });
     }
 
     const subscriptionPlan = await getUserSubscriptionPlan(user.id);
+    console.log("Subscription Plan:", subscriptionPlan);
 
     // The user is on the pro plan.
     // Create a portal session to manage subscription.
@@ -52,6 +55,7 @@ export async function GET(req: NextRequest) {
 
     return new Response(JSON.stringify({ url: stripeSession.url }));
   } catch (error) {
+    console.error("Error in GET /api/stripe:", error); // Log the error
     if (error instanceof z.ZodError) {
       return new Response(JSON.stringify(error.issues), { status: 422 });
     }
