@@ -31,7 +31,7 @@ model User {
   emailVerified          Boolean?                @default(false)
   picture                String?
   githubId               Int?                    @unique
-  walletAddress          String
+  walletAddress          String?                 @unique
   stripeCustomerId       String?                 @unique @map("stripe_customer_id")
   stripeSubscriptionId   String?                 @unique @map("stripe_subscription_id")
   stripePriceId          String?                 @map("stripe_price_id")
