@@ -78,6 +78,7 @@ export const GET = async (request: NextRequest) => {
         email: githubUser.email,
         picture: githubUser.avatar_url,
         emailVerified: Boolean(githubUser.email),
+        walletAddress: "",
       },
     });
     if (githubUser.email) {

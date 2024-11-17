@@ -1,6 +1,6 @@
 "use server";
 
-import { type Project } from "@prisma/client";
+import { dApp, smartContract, type Project } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { validateRequest } from "~/actions/auth";
@@ -10,6 +10,8 @@ import prisma from "~/lib/prisma";
 interface Payload {
   name: string;
   domain: string;
+  dapps?: dApp;
+  smartcontracts?: smartContract;
 }
 
 export async function createProject(payload: Payload) {
@@ -23,6 +25,10 @@ export async function createProject(payload: Payload) {
           id: user?.id,
         },
       },
+      dapps: payload.dapps ? { create: [{ ...payload.dapps }] } : undefined, // Ensure dapps is structured correctly
+      smartcontracts: payload.smartcontracts
+        ? { create: [{ ...payload.smartcontracts }] }
+        : undefined, // Ensure smartcontracts is structured correctly
     },
   });
 
@@ -77,7 +83,13 @@ export async function updateProjectById(id: string, payload: Payload) {
       id,
       userId: user?.id,
     },
-    data: payload,
+    data: {
+      ...payload,
+      dapps: payload.dapps ? { update: [{ where: { id: payload.dapps.id }, data: { ...payload.dapps } }] } : undefined, // Adjusted to include 'where' and 'data'
+      smartcontracts: payload.smartcontracts
+        ? { update: [{ where: { id: payload.smartcontracts.id }, data: { ...payload.smartcontracts } }] } // Adjusted to include 'where' and 'data'
+        : undefined, // Adjusted to use 'update'
+    },
   });
   revalidatePath(`/dashboard/projects`);
 }

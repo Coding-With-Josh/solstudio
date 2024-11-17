@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import LogoutButton from "~/components/shared/logout-button";
+import WalletConnection from "~/components/solana/WalletConnection";
 import { buttonVariants } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "~/components/ui/sheet";
 import { cn } from "~/lib/utils";
@@ -36,7 +37,7 @@ export default function Navbar({
         <p className="font-mono uppercase font-bold dark:text-gray-400 dark:hover:text-gray-200 text-gray-900 hover:text-gray-700">Sol<span className="text-blue-700 hover:text-blue-500">Studio</span></p>
       </Link>
       <div className="hidden items-center gap-12 lg:flex 2xl:gap-16">
-        <div className="space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
+        <div className="flex items-center justify-center space-x-4 text-center text-sm leading-loose text-muted-foreground md:text-left">
           <Link
             href="/changelog"
             className="font-semibold hover:underline hover:underline-offset-4"
@@ -49,9 +50,12 @@ export default function Navbar({
           >
             {headerText.about}
           </Link>
+
         </div>
         <div className="flex items-center gap-x-2">
           {session ? (
+                    <div className="flex items-center justify-center space-x-3 text-center text-sm leading-loose text-muted-foreground md:text-left">
+
             <Link
               href="/dashboard"
               className={cn(
@@ -62,6 +66,8 @@ export default function Navbar({
             >
               {headerText.dashboard}
             </Link>
+                      <WalletConnection/>
+            </div>
           ) : (
             <Link href="/login" className={buttonVariants()}>
               {headerText.login}

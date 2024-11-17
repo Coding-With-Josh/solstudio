@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Script from "next/script";
 import { cn } from "~/lib/utils";
 import "./globals.css";
+import WalletContextProvider from "~/lib/WalletContextProvider";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -30,7 +31,9 @@ export default function RootLayout({
           fontHeading.variable
         )}
       >
+        <WalletContextProvider>
         {children}
+        </WalletContextProvider>
       </body>
       {process.env.NODE_ENV === "production" && (
         <Script

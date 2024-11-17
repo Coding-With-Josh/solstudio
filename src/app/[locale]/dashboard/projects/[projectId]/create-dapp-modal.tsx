@@ -24,36 +24,47 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import { FreePlanLimitError } from "~/lib/utils";
-import { checkIfFreePlanLimitReached, createProject } from "./action";
+import { checkIfFreePlanLimitReached, createdapp } from "./action";
 
-export const projectSchema = z.object({
-  name: z.string().min(1, { message: "Please enter a project name." }),
-  domain: z.string().min(1, { message: "Please enter a project domain." }),
+export const dappSchema = z.object({
+  name: z.string().min(1, { message: "Please enter a dapp name." }),
+  description: z.string().min(1, { message: "Please enter a description for your dapp." }),
 });
 
-export type ProjectFormValues = z.infer<typeof projectSchema>;
+export type DappFormValues = z.infer<typeof dappSchema>;
 
-export default function CreateProjectModal() {
+interface CreateDappModalProps {
+  projectId: string;
+}
+
+export default function CreateDappModal({ projectId }: CreateDappModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const form = useForm<ProjectFormValues>({
-    resolver: zodResolver(projectSchema),
+  const form = useForm<DappFormValues>({
+    resolver: zodResolver(dappSchema),
     defaultValues: {
       name: "",
-      domain: "",
+      description: "",
     },
   });
 
-  async function onSubmit(values: ProjectFormValues) {
+  async function onSubmit(values: DappFormValues) {
     try {
-      const limitReached = await checkIfFreePlanLimitReached();
+      const limitReached = await checkIfFreePlanLimitReached(projectId);
       if (limitReached) {
         throw new FreePlanLimitError();
       }
-      await createProject(values);
+
+      await createdapp({
+        name: values.name,
+        description: values.description,
+        projectId: projectId,
+      });
+
       toast({
-        title: "Project created successfully.",
+        title: "DApp created successfully.",
       });
       form.reset();
       setIsOpen(false);
@@ -66,11 +77,12 @@ export default function CreateProjectModal() {
         });
       }
       return toast({
-        title: "Error creating project. Please try again.",
+        title: "Error creating dapp. Please try again.",
         variant: "destructive",
       });
     }
   }
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
@@ -79,17 +91,17 @@ export default function CreateProjectModal() {
           className="flex flex-col items-center justify-center gap-y-2.5 p-8 text-center hover:bg-accent"
         >
           <Button size="icon" variant="ghost">
-            <Icons.projectPlus className="h-8 w-8 " />
+            <Icons.projectPlus className="h-8 w-8" />
           </Button>
-          <p className="text-xl font-medium ">Create a project</p>
+          <p className="text-xl font-medium">Create a DApp</p>
         </Card>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Project</DialogTitle>
+          <DialogTitle>Create DApp</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
@@ -97,7 +109,7 @@ export default function CreateProjectModal() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="XYZ" {...field} />
+                    <Input placeholder="My DApp" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,24 +117,22 @@ export default function CreateProjectModal() {
             />
             <FormField
               control={form.control}
-              name="domain"
+              name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Domain</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Input placeholder="xyz.com" {...field} />
+                    <Textarea
+                      placeholder="Enter a description for your DApp"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <DialogFooter>
-              <Button disabled={form.formState.isSubmitting} type="submit">
-                {form.formState.isSubmitting && (
-                  <Icons.spinner className={"mr-2 h-5 w-5 animate-spin"} />
-                )}
-                Create
-              </Button>
+              <Button type="submit">Create DApp</Button>
             </DialogFooter>
           </form>
         </Form>

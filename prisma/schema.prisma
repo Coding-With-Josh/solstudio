@@ -1,20 +1,18 @@
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider  = "postgresql"
-  url       = env("DB_PRISMA_URL") // uses connection pooling
-  directUrl = env("DB_URL_NON_POOLING") // uses a direct connection
+  url       = env("DB_PRISMA_URL")
+  directUrl = env("DB_URL_NON_POOLING")
 }
 
 model Session {
   id        String   @id @default(cuid())
   userId    String
   expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model EmailVerificationCode {
@@ -23,7 +21,7 @@ model EmailVerificationCode {
   userId    String
   email     String
   expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -33,54 +31,57 @@ model User {
   emailVerified          Boolean?                @default(false)
   picture                String?
   githubId               Int?                    @unique
-  sessions               Session[]
-  // walletAddress          String
-  projects               Project[]
+  walletAddress          String
+  stripeCustomerId       String?                 @unique @map("stripe_customer_id")
+  stripeSubscriptionId   String?                 @unique @map("stripe_subscription_id")
+  stripePriceId          String?                 @map("stripe_price_id")
+  stripeCurrentPeriodEnd DateTime?               @map("stripe_current_period_end")
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
   emailVerificationCodes EmailVerificationCode[]
-
-  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
-  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
-  stripePriceId          String?   @map(name: "stripe_price_id")
-  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  projects               Project[]
+  sessions               Session[]
 }
 
 model Project {
-  id           String          @id @default(cuid())
-  name         String
-  domain       String
-  userId       String
-  // type         String
-  // dapps        dApp[]
-  // smartcontact smartContract[]
-  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id             String          @id @default(cuid())
+  name           String
+  domain         String
+  userId         String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dapps          dApp[]
+  smartcontracts smartContract[]
 }
 
-// model dApp {
-//   id         String       @id @default(cuid())
-//   name       String
-//   project    Project[]
-//   components Components[]
-// }
+model dApp {
+  id          String       @id @default(cuid())
+  name        String
+  description String
+  projectId   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  components  Components[] @relation("ComponentsTodApp")
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
 
-// model smartContract {
-//   id         String       @id @default(cuid())
-//   name       String
-//   project    Project[]
-//   components Components[]
-// }
+model smartContract {
+  id          String       @id @default(cuid())
+  name        String
+  description String?
+  projectId   String
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  components  Components[] @relation("ComponentsTosmartContract")
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
 
-// model Components {
-//   id             String          @id @default(cuid())
-//   name           String
-//   type           String
-//   components     String[]
-//   dapps          dApp[]
-//   smartcontracts smartContract[]
-// }
-
- 
+model Components {
+  id             String          @id @default(cuid())
+  name           String
+  type           String
+  components     String[]
+  dapps          dApp[]          @relation("ComponentsTodApp")
+  smartcontracts smartContract[] @relation("ComponentsTosmartContract")
+}
