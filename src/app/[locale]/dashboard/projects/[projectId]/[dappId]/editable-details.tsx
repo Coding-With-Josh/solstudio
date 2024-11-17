@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Save } from 'lucide-react';
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "~/components/ui/use-toast";
 import { updatedappById } from "../action";
@@ -105,7 +106,7 @@ export default function EditableDetails({ dapp, project }: EditableDetailsProps)
               {isPending ? (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               ) : (
-                <Icons.save className="mr-2 h-4 w-4" />
+                <Save className="mr-2 h-4 w-4" />
               )}
               Save Changes
             </Button>
