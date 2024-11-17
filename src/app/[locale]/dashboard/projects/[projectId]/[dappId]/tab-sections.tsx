@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import DeleteCard from "./delete-card";
 import EditableDetails from "./editable-details";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { formatDate } from "~/lib/utils";
 
 export default function TabSections({
   dapp,
@@ -42,13 +41,13 @@ export default function TabSections({
               <div>
                 <h3 className="font-medium">Created</h3>
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(dapp.createdAt)}
+                  {dapp.createdAt.toLocaleString()}
                 </p>
               </div>
               <div>
                 <h3 className="font-medium">Last Updated</h3>
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(dapp.updatedAt)}
+                  {dapp.updatedAt.toLocaleString()}
                 </p>
               </div>
             </CardContent>
